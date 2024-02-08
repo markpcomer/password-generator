@@ -16,24 +16,26 @@ function generatePassword(length){
 }
 
 
+
 // Write password to the #password input
-function writePassword() {
+function writePassword(characters) {
   var password = generatePassword(passwordLength);
   var passwordText = document.querySelector("#password");
 
   var passwordLength = prompt("Choose Password Length: 8 - 128.");
   var lowercase = confirm("Hit Okay If You Would Like Lowercase Letters in Your Password.");
   var uppercase = confirm("Hit Okay If You Would Like Uppercase Letters in Your Password.");
-  var numbers = confirm("Hit Okay If You Would Like Numbers in YourPassword.");
+  var numbers = confirm("Hit Okay If You Would Like Numbers in Your Password.");
   var specialChars = confirm("Hit Okay If You Would Like Special Characters in Your Password.");
 
-  var passTrue = function(){
+  var passTrue = function(passwordLength){
     if (passwordLength >= 8 && passwordLength <= 128) {
       return true;
     } else {
       return false;
     }
   }
+  
   var lowerChars = function(lowercase){
     var string = lowercase;
     if (lowercase === true) {
@@ -63,19 +65,15 @@ function writePassword() {
     }
   }
 
-
-
-
   if ((passTrue !== true) && (uppercase === false ) && (lowercase === false) && 
   (numbers === false) && (specialChars === false)){
     alert("Please Start Over.")
     } else {
-    generatePassword(passTrue, lowerChars, upperChars, numChars, specChars);
-  }
+        alert(generatePassword(passwordLength, lowerChars, upperChars, numChars, specChars));
+    }
   passwordText.value = password;
   return password;
 
-  //end writePassword();
 }
 
 // Add event listener to generate button
