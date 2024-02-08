@@ -4,22 +4,22 @@
 // 4  Display Generated Password in Alert Window.
 
 var generateBtn = document.querySelector("#generate");
-var characters = "abcdefghijklmnopqrstuvwxyz123456789!#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
+console.log(characters);
 
-function generatePassword(length){
-  var password = "";
+function generatePassword(){
+  var password = " ";
   var charactersLength = characters.length;
-  for(var i = 0; i < length; i++){
+  for(var i = 0; i < characters.length; i++){
     password += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
+  console.log(password);
   return password;
 }
 
 
-
 // Write password to the #password input
-function writePassword(characters) {
-  var password = generatePassword(passwordLength);
+function writePassword() {
   var passwordText = document.querySelector("#password");
 
   var passwordLength = prompt("Choose Password Length: 8 - 128.");
@@ -35,42 +35,43 @@ function writePassword(characters) {
       return false;
     }
   }
+
+    if (!lowercase) {
+      console.log("No lower");
+      characters = characters.replace(/[a-z]/g, " "); // Use a regular expression to replace all lowercase characters
+  }
+    console.log(characters);
   
-  var lowerChars = function(lowercase){
-    var string = lowercase;
-    if (lowercase === true) {
-      return string = characters.replace("123456789!#$%&'()*+,-./:;<=>?@[\]^_`{|}~", " ");
-    }
-  }
 
-  var upperChars = function(uppercase){
-    var string = uppercase;
-    if (uppercase === true) {
-      string = characters.replace("123456789!#$%&'()*+,-./:;<=>?@[\]^_`{|}~", " ");
-      return string.toUpperCase();
+    if (!uppercase) {
+      console.log("No upper");
+      characters = characters.replace("123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~", " ");
     }
-  }
+    console.log(characters);
 
-  var numChars = function(numbers){
-    var string = numbers;
-    if (numbers === true) {
-      return string = characters.substring(26, 35);
+
+    if (!numbers) {
+      console.log("No numbers");
+       characters = characters.substring(26, 35);
     }
-  }
+    console.log(characters);
+  
 
-  var specChars = function(specialChars){
-    var string = specialChars;
-    if (specialChars === true) {
-      return string = characters.replace("abcdefghijklmnopqrstuvwxyz123456789", " ");
+
+    if (!specialChars) {
+      console.log("No special characters");
+       characters = characters.replace("abcdefghijklmnopqrstuvwxyz123456789", " ");
     }
-  }
+    
+    var password = generatePassword();
 
-  if ((passTrue !== true) && (uppercase === false ) && (lowercase === false) && 
+  if ((passTrue === false) || (uppercase === false ) && (lowercase === false) && 
   (numbers === false) && (specialChars === false)){
     alert("Please Start Over.")
     } else {
-        alert(generatePassword(passwordLength, lowerChars, upperChars, numChars, specChars));
+        alert(generatePassword(passwordLength));
     }
+    console.log(password);
   passwordText.value = password;
   return password;
 
