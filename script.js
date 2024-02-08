@@ -4,71 +4,79 @@
 // 4  Display Generated Password in Alert Window.
 
 var generateBtn = document.querySelector("#generate");
+var characters = "abcdefghijklmnopqrstuvwxyz123456789!#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
 
-
-
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  var passwordLength = prompt("Choose Password Length: 8 - 128.");
-  var uppercase = confirm("Hit Okay If You Would Like Uppercase Letters in Your Password.");
-  var lowercase = confirm("Hit Okay If You Would Like Lowercase Letters in Your Password.");
-  var numbers = confirm("Hit Okay If You Would Like Numbers in YourPassword.");
-  var specialChars = confirm("Hit Okay If You Would Like Uppercase Letters in Your Password.");
-
-  if ((passwordLength < 8 && passwordLength > 128) || ((uppercase === false ) && (lowercase === false) && 
-  (numbers === false) && (specialChars === false))){
-    alert("Please Start Over.")
-    } else {
-    
+function generatePassword(length){
+  var password = "";
+  var charactersLength = characters.length;
+  for(var i = 0; i < length; i++){
+    password += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  passwordText.value = password;
-}
-
-function randomizer(str){
-  return Math.floor(Math.random() *str.length);
-}
-
-function generatePassword(getRandomLowercase, getRandomUppercase, getRandomNumbers, getRandomSpecialCharacters){
-  var password = [""];
-  var lower = randomizer(getRandomLowercase);
-  var upper = randomizer(getRandomUppercase);
-  var nums = randomizer(getRandomNumbers);
-  var chars = randomizer(getRandomSpecialCharacters);
-  password = password.concat(lower + upper + nums + chars);
   return password;
 }
 
 
+// Write password to the #password input
+function writePassword() {
+  var password = generatePassword(passwordLength);
+  var passwordText = document.querySelector("#password");
+
+  var passwordLength = prompt("Choose Password Length: 8 - 128.");
+  var lowercase = confirm("Hit Okay If You Would Like Lowercase Letters in Your Password.");
+  var uppercase = confirm("Hit Okay If You Would Like Uppercase Letters in Your Password.");
+  var numbers = confirm("Hit Okay If You Would Like Numbers in YourPassword.");
+  var specialChars = confirm("Hit Okay If You Would Like Special Characters in Your Password.");
+
+  var passTrue = function(){
+    if (passwordLength >= 8 && passwordLength <= 128) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  var lowerChars = function(lowercase){
+    var string = lowercase;
+    if (lowercase === true) {
+      return string = characters.replace("123456789!#$%&'()*+,-./:;<=>?@[\]^_`{|}~", " ");
+    }
+  }
+
+  var upperChars = function(uppercase){
+    var string = uppercase;
+    if (uppercase === true) {
+      string = characters.replace("123456789!#$%&'()*+,-./:;<=>?@[\]^_`{|}~", " ");
+      return string.toUpperCase();
+    }
+  }
+
+  var numChars = function(numbers){
+    var string = numbers;
+    if (numbers === true) {
+      return string = characters.substring(26, 35);
+    }
+  }
+
+  var specChars = function(specialChars){
+    var string = specialChars;
+    if (specialChars === true) {
+      return string = characters.replace("abcdefghijklmnopqrstuvwxyz123456789", " ");
+    }
+  }
 
 
-function getRandomLowercase() {
-  var letters = "abcdefghijklmnopqrstuvwxyz";
-  return letters[randomizer(letters)];
-}
 
 
+  if ((passTrue !== true) && (uppercase === false ) && (lowercase === false) && 
+  (numbers === false) && (specialChars === false)){
+    alert("Please Start Over.")
+    } else {
+    generatePassword(passTrue, lowerChars, upperChars, numChars, specChars);
+  }
+  passwordText.value = password;
+  return password;
 
-function getRandomUppercase () {
-  var letter = getRandomLowercase();
-  return letter.toUpperCase();
-}
-
-console.log(getRandomUppercase());
-
-function getRandomNumbers() {
-  let numbers = "123456789";
-  return number[randomizer(numbers)];
-}
-
-function getRandomSpecialCharacters(){
-  let characters = "!#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-  return characters[randomizer(characters)];
+  //end writePassword();
 }
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-
-
