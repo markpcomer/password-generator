@@ -38,7 +38,7 @@ function writePassword() {
 
     if (!lowercase) {
       console.log("No lower");
-      characters = characters.replace(/[a-z]/g, " "); // Use a regular expression to replace all lowercase characters
+      characters = characters.replace(/[a-z]/g, " "); // 
   }
     console.log(characters);
   
