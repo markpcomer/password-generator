@@ -5,23 +5,18 @@
 
 var generateBtn = document.querySelector("#generate");
 var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
-console.log(characters);
 
-function generatePassword(){
+function generatePassword(passwordLength){
   var password = " ";
-  var charactersLength = characters.length;
-  for(var i = 0; i < characters.length; i++){
-    password += characters.charAt(Math.floor(Math.random() * charactersLength));
+  for(var i = 0; i < passwordLength; i++){
+    password += characters.charAt(Math.floor(Math.random() * characters.length));
   }
-  console.log(password);
   return password;
 }
-
 
 // Write password to the #password input
 function writePassword() {
   var passwordText = document.querySelector("#password");
-
   var passwordLength = prompt("Choose Password Length: 8 - 128.");
   var lowercase = confirm("Hit Okay If You Would Like Lowercase Letters in Your Password.");
   var uppercase = confirm("Hit Okay If You Would Like Uppercase Letters in Your Password.");
@@ -37,44 +32,33 @@ function writePassword() {
   }
 
     if (!lowercase) {
-      console.log("No lower");
-      characters = characters.replace(/[a-z]/g, " "); // 
+      characters = characters.replace("abcdefghijklmnopqrstuvwxyz", " "); 
   }
-    console.log(characters);
   
-
+  
     if (!uppercase) {
-      console.log("No upper");
-      characters = characters.replace("123456789!#$%&'()*+,-./:;<=>?@[]^_`{|}~", " ");
+      characters = characters.replace("ABCDEFGHIJKLMNOPQRSTUVWXYZ", " ");
     }
-    console.log(characters);
-
 
     if (!numbers) {
-      console.log("No numbers");
-       characters = characters.substring(26, 35);
+       characters = characters.replace("123456789", " ");
     }
-    console.log(characters);
-  
-
 
     if (!specialChars) {
-      console.log("No special characters");
-       characters = characters.replace("abcdefghijklmnopqrstuvwxyz123456789", " ");
+       characters = characters.replace("!#$%&'()*+,-./:;<=>?@[]^_`{|}~", " ");
     }
+    var password = generatePassword(passwordLength);
     
-    var password = generatePassword();
 
-  if ((passTrue === false) || (uppercase === false ) && (lowercase === false) && 
-  (numbers === false) && (specialChars === false)){
+  if ((passTrue === false) || ((uppercase === false ) && (lowercase === false) && 
+  (numbers === false) && (specialChars === false))){
     alert("Please Start Over.")
     } else {
-        alert(generatePassword(passwordLength));
+        alert(generatePassword(passwordLength, lowercase, uppercase, specialChars));
     }
-    console.log(password);
   passwordText.value = password;
   return password;
-
+    
 }
 
 // Add event listener to generate button
