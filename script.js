@@ -1,109 +1,109 @@
-// CREATE A PASSWORD OBJECT
-// Arrays for different character sets: special characters, numeric digits, lowercase letters, and uppercase letters
+// Define the minimum and maximum length of the password
+const minPasswordLength = 8;
+const maxPasswordLength = 128;
+
+// Define character sets for different categories of characters
 const characterSets = {
-  special: ['@', '%', '+', '\\', '/', "'", '!', '#', '$', '^', '?', ':', ',', ')', '(', '}', '{', ']', '[', '~', '-', '_', '.'],
-  numeric: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-  lower: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-  upper: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-  'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+  special: ['@', '%', '+', '\\', '/', "'", '!', '#', '$', '^', '?', ':', ',', ')', '(', '}', '{', ']', '[', '~', '-', '_', '.'],  // Special characters
+  numeric: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],  // Numeric digits
+  lower: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],  // Lowercase letters
+  upper: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],  // Uppercase letters
 };
 
-// Function to prompt user for password options and validate inputs
-function getPasswordOptions() {
-  // Prompt user to select password length
-  const passLength = prompt("Please select a password length between 8 and 128");
-  
-  // Check if the entered length is a number and within the acceptable range
-  if (isNaN(passLength) || passLength < 8 || passLength > 128 ) {
-    alert("Password length needs to be a number between 8 and 128.");
+// Function to get password options from the user
+const getPasswordOptions = () => {
+  // Prompt user to select a password length within the specified range
+  const passwordLength = parseInt(prompt(`Please select a password length between ${minPasswordLength} and ${maxPasswordLength}.`));
+
+  // Check if password length is valid
+  if (isNaN(passwordLength) || passwordLength < minPasswordLength || passwordLength > maxPasswordLength ) {
+    console.error(`Invalid password length. It must be a number between ${minPasswordLength} and ${maxPasswordLength}.`);
+    alert(`Password length needs to be a number between ${minPasswordLength} and ${maxPasswordLength}.`);
     return null;
   }
 
-  // Prompt user to choose which character sets to include in the password
-  const hasSpecialChars = confirm("Would you like special characters in your password?");
-  const hasNumericalChars = confirm("Would you like numbers in your password?");
-  const hasLowerCaseChars = confirm("Would you like lower case letters in your password?");
-  const hasUpperCaseChars = confirm("Would you like upper case letters in your password?");
+  // Ask user which character sets they want to include in their password
+  const options = {
+    special: confirm("Would you like special characters in your password?"),
+    numeric: confirm("Would you like numbers in your password?"),
+    lower: confirm("Would you like lower case letters in your password?"),
+    upper: confirm("Would you like upper case letters in your password?")
+  }
 
-  // Ensure that at least one character set is selected
-  if (![hasSpecialChars || hasNumericalChars || hasLowerCaseChars || hasUpperCaseChars]) {
-    alert("You must select at least one character type");
+  // Check if at least one character set was selected
+  if (!Object.values(options).includes(true)) {
+    console.error("No character type was selected. At least one must be chosen.");
+    alert("Please include at least one character type.");
     return null;
   }
-
-  // Return the password options object
-  return {
-    passLength: passLength,
-    hasSpecialChars: hasSpecialChars,
-    hasNumericalChars: hasNumericalChars,
-    hasLowerCaseChars: hasLowerCaseChars,
-    hasUpperCaseChars: hasUpperCaseChars
-  }
+  return { passwordLength, options }  // Return selected options and password length
 };
 
-// Function to select a random element from an array
-function getRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-};
+// Function to randomly select a character from an array
+const getRandomChar = arr =>  {
+  const randomValue = arr[Math.floor(Math.random() * arr.length)];
+  return randomValue;
+}
 
-// Function to generate the password based on user selections
-function generatePassword() {
-  const options = getPasswordOptions();  // Get the password options from the user
-  if (!options) {  // If no valid options are returned, return null
-    return null;
-  };
-
-  let potentialChars = [];  // Array to hold all possible characters to choose from
-  const guaranteedChars = [];  // Array to hold at least one guaranteed character of each selected type
-
-  // Add special characters if selected
-  if (options.hasSpecialChars) {
-    potentialChars = potentialChars.concat(characterSets.special);  // Add special characters to potentialChars array
-    guaranteedChars.push(getRandom(characterSets.special));  // Add a random special character to guaranteedChars
-  }
-
-  // Add numeric characters if selected
-  if (options.hasNumericalChars) {
-    potentialChars = potentialChars.concat(characterSets.numeric);  // Add numeric characters to potentialChars array
-    guaranteedChars.push(getRandom(characterSets.numeric));  // Add a random numeric character to guaranteedChars
-  }
-  
-  // Add lowercase letters if selected
-  if (options.hasLowerCaseChars) {
-    potentialChars = potentialChars.concat(characterSets.lower);  // Add lowercase characters to potentialChars array
-    guaranteedChars.push(getRandom(characterSets.lower));  // Add a random lowercase character to guaranteedChars
-  }
-
-  // Add uppercase letters if selected
-  if (options.hasUpperCaseChars) {
-    potentialChars = potentialChars.concat(characterSets.upper);  // Add uppercase characters to potentialChars array
-    guaranteedChars.push(getRandom(characterSets.upper));  // Add a random uppercase character to guaranteedChars
-  }
-
-  // Create the result password starting with guaranteed characters
-  const result = guaranteedChars;
-
-  // Add more random characters to fill the desired password length
-  for (let i = result.length; i < options.passLength; i++) {
-    result.push(getRandom(potentialChars));  // Add a random character from potentialChars
-  }
-
-  // Shuffle the resulting password to randomize the order
-  result.sort(function() {
-    return Math.random() - 0.5;
-  })
-
-  // Join the characters together to form the final password
-  return result.join('');
-};
-
-// Function to display the generated password in the HTML
-function displayPassword() {
-  let pass = generatePassword();  // Generate the password
-  if (pass) {
-    document.querySelector('#password').value = pass;  // Set the generated password in the password field
+// Function to shuffle the array to randomize the order
+const shuffleArray = array => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];  // Swap elements at positions i and j
   }
 }
 
-// Add an event listener to the 'Generate' button to trigger password generation when clicked
-document.querySelector('#generate').addEventListener('click', displayPassword);
+// Function to generate the password
+const generatePassword = () => {
+  const options  = getPasswordOptions(); // Get the user's password options
+
+  // If options are invalid, return null
+  if (!options) {
+    console.error("Invalid options or password length.");
+    return null
+  }
+
+  const { passwordLength, options: selectedOptions } = options;
+
+  const potentialChars = [];  // Array to hold all possible characters based on selected options
+  const selectedChars = [];   // Array to store at least one character from each selected set
+
+  // Iterate through selected options and add the corresponding character sets
+  Object.entries(selectedOptions).forEach(([type, include]) => {
+    if (include) {
+      const set = characterSets[type];
+      potentialChars.push(...set);  // Add all characters from the selected set to potentialChars
+      selectedChars.push(getRandomChar(set));  // Add one random character from the set to selectedChars
+    }
+  })
+
+  // If no characters were selected, return null
+  if(selectedChars.length === 0) {
+    console.error("No characters selected.");
+    return null;
+  }
+
+  // Fill up the password array until it reaches the specified length
+  const password = [...selectedChars];
+  while (password.length < passwordLength) {
+    password.push(getRandomChar(potentialChars));  // Add a random character from the potential characters
+  }
+
+  // Shuffle the password to ensure randomness
+  shuffleArray(password);
+
+  return password.join('');  // Join the array of characters into a single string and return it
+};
+
+// Function to display the generated password in an input field
+const displayPassword = () => {
+  const password = generatePassword();  // Generate the password
+  if (password) {
+    document.querySelector('#password').value = password;  // Set the generated password in the password field
+  } else {
+    console.error("Password generation failed.");
+  }
+}
+
+// Add event listener to the generate button to trigger password generation when clicked
+document.querySelector('#generate')?.addEventListener('click', displayPassword);
